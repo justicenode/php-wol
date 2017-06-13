@@ -13,7 +13,7 @@ A simple PHP WakeOnLan UI
 
 ###### Installation
 
-1. Clone this repo in to your webroot
+1. Clone the repo and copy the `html` folder into your webroot
 2. Change the lines below in `db.php` to fit your mysql setup
 
 ```
