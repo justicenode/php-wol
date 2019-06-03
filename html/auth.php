@@ -44,7 +44,7 @@ class Auth {
 	 */
 	function login($username, $password){
 		$db = new Database();
-		$rs = $db->query("SELECT * FROM user WHERE username = '" . mysql_escape_string($username) . "'")->fetch_assoc();
+		$rs = $db->query("SELECT * FROM user WHERE username = '" . mysqli_real_escape_string($db, $username) . "'")->fetch_assoc();
 		if(empty($rs)) return false;
 		
 		$user = $rs;
