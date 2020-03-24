@@ -9,7 +9,7 @@
 	}
 	else if(isset($_POST['mac'], $_POST['broadcast'])) {
 		$broadcast =  $_POST['broadcast'];
-		$mac_array = split(':', $_POST['mac']);
+		$mac_array = explode(':', $_POST['mac']);
 
 		$hwaddr = '';
 
