@@ -48,4 +48,3 @@ INSERT INTO user VALUES (1, 'admin', '1879303f48fc69acc84e6b24608b2c7b932c18f905
 		$this->multi_query($query);
 	}
 }
-?>
