@@ -9,7 +9,7 @@ class Auth {
 		if(!isset($_SESSION)) session_start();
 		
 		if(!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
-			login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+			$this->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
 		}
 	}
 
