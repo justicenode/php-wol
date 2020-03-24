@@ -1,12 +1,21 @@
 <?php
 class Database extends mysqli{
-	private $servername = "localhost";
-	private $username = "root";
-	private $password = "";
-	private $database = "php-wol";
-	private $mysqli;
+	private string $servername = "localhost";
+	private string $username = "root";
+	private string $password = "";
+    private string $database = "php-wol";
 	
 	function __construct() {
+	    // Get configuration
+        if (file_exists('./config.php')) {
+            [
+                "servername" => $this->servername,
+                "username" => $this->username,
+                "password" => $this->password,
+                "database" => $this->database,
+            ] = include('./config.php');
+        }
+
 		// Create connection
 		parent::__construct($this->servername, $this->username, $this->password);
 
