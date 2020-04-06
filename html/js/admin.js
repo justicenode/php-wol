@@ -1,42 +1,38 @@
-var servers = [];
-var timer, create = true;
-var serverName, mac, ip, id, broadcast, username, password, usernameDisplay, level;
+let servers = [];
+let create = true;
+let serverName, mac, ip, id, broadcast, username, password, usernameDisplay, level;
 
 function getServers(){
-	$.post("servers.php", {action:"get"}).done(function(data) {
-		servers = data;
-		
-		$("#serverlist").html("");
-		for(var server in servers){
+	$.post("servers.php", {action:"get"}).done((servers) => {
+		const serverList = $("#serverlist");
+		serverList.html("");
+		for (const server in servers) {
 			const thisServer = servers[server];
-			var row = $("<tr><td>" + thisServer.name + "</td><td>" + thisServer.ip + "</td><td></td><td></td></tr>");
-			var col = $('<div class="btn-group"/>');
-			col.append('<a class="btn btn-primary"><i class="glyphicon glyphicon-off"></i> Wake Up</a>').children().click(function(){wake(thisServer);});
-			col.append($('<a class="btn btn-default"><i class="glyphicon glyphicon-refresh"></i> Refresh</a>').click(function(){ping(thisServer);}));
-			
-			if(level > 1){
-				
-				var btngrp = $('<div class="btn-group"><a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a><ul class="dropdown-menu" role="menu"></ul></div>');
-			
-				btngrp.children("ul").append($('<li><a><i class="glyphicon glyphicon-pencil"></i> Edit</a></li>').click(function(){edit(thisServer);}));
-				btngrp.children("ul").append($('<li><a><i class="glyphicon glyphicon-trash"></i> Remove</a></li>').click(function(){remove(thisServer);}));
-				
+			const row = $(`<tr><td>${thisServer.name}</td><td>${thisServer.ip}</td><td></td><td></td></tr>`);
+			const col = $('<div class="btn-group"/>');
+			col.append('<a class="btn btn-primary"><i class="glyphicon glyphicon-off"></i> Wake Up</a>').children().click(() => {wake(thisServer);});
+			col.append($('<a class="btn btn-default"><i class="glyphicon glyphicon-refresh"></i> Refresh</a>').click(() => {ping(thisServer);}));
+
+			if (level > 1) {
+				const btngrp = $('<div class="btn-group"><a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a><ul class="dropdown-menu" role="menu"></ul></div>');
+
+				btngrp.children("ul").append($('<li><a><i class="glyphicon glyphicon-pencil"></i> Edit</a></li>').click(() => {edit(thisServer);}));
+				btngrp.children("ul").append($('<li><a><i class="glyphicon glyphicon-trash"></i> Remove</a></li>').click(() => {remove(thisServer);}));
+
 				col.append(btngrp);
 			}
-			
+
 			row.children(':last').append(col);
-			$("#serverlist").append(row);
+			serverList.append(row);
 			thisServer.statusField = $("#serverlist tr:last td:nth-child(3)");
 		}
-		
+
 		pingAll();
 	});
 }
 
 function guid() {
-    var S4 = function() {
-       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-    };
+    const S4 = () => (((1+Math.random())*0x10000)|0).toString(16).substring(1);
     return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 }
 
@@ -62,7 +58,7 @@ function edit(server) {
 
 function save() {
 	$.post("servers.php", {id:id, mac:mac.val(), ip:ip.val(),name:serverName.val(),broadcast:broadcast.val(), action: (create ? "add" : "modify")})
-		.done(function(data){
+		.done(() => {
 			bootbox.alert("Server Saved");
 			getServers();
 		})
@@ -100,7 +96,7 @@ function wake(server) {
 function ping(server){
 	server.statusField.html("Loading...");
 	server.statusField.css({color:"blue"});
-	
+
 	$.post("ping.php", {ip:server.ip})
 		.done(function(data){
 			if(data.response == "alive"){
@@ -119,9 +115,7 @@ function ping(server){
 }
 
 function pingAll(){
-	for(var server in servers){
-		ping(servers[server]);
-	}
+	servers.forEach(server => ping(server));
 }
 
 function logout(){
@@ -179,6 +173,6 @@ window.onload = function(){
 	broadcast = $("#broadcast");
 	usernameDisplay = $('#username-display');
 	password = $('#password');
-	
+
 	showLogin();
-}
+};

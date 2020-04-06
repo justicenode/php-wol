@@ -45,13 +45,14 @@ class Auth {
 	 */
 	function login($username, $password){
 		$db = new Database();
-		$rs = $db->query("SELECT * FROM user WHERE username = '" . mysqli_escape_string($db, $username) . "'")->fetch_assoc();
-		if(empty($rs)) return false;
+		$st = $db->prepare("SELECT * FROM user WHERE username = ?");
+		$st->execute([$username]);
+		if ($st->rowCount() == 0) return false;
 		
-		$user = $rs;
+		$user = $st->fetch();
 		$hash = hash('sha512', $user['level'].'g$6|@#'.$user['id'].$password);
 		
-		if($user['password'] == $hash) {
+		if ($user['password'] == $hash) {
 			$_SESSION['user'] = $user;
 			return true;
 		}

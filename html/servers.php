@@ -7,25 +7,22 @@
 	
 	header('Content-Type: application/json');
 	if(!isset($_POST['action']) || $_POST['action'] == "get"){
-		$query = "SELECT * FROM server";
-		$rs = $db->query($query);
-		$servers = array();
-		while ($row = $rs->fetch_object()) {
-			$servers[] = $row;
-		}
-		$rs->close();
+		$st = $db->prepare("SELECT * FROM server");
+		$st->execute();
 		
-		echo json_encode($servers);
+		echo json_encode($st->fetchAll());
 	}
 	else if ($_POST['action'] == "add" && isset($_POST['id'],$_POST['name'],$_POST['mac'],$_POST['ip'],$_POST['broadcast'])){
 		if($auth->hasLevel(2)) {
-			foreach($_POST as $k=>$v) $_POST[$k] = $db->escape_string($v);
-			$query = "INSERT INTO server VALUES ('{$_POST['id']}','{$_POST['name']}','{$_POST['ip']}','{$_POST['mac']}','{$_POST['broadcast']}')";
-			$result = $db->query($query);
-			if($result) echo '{"status":200, "reponse":"Success"}';
+			$st = $db->prepare("INSERT INTO server VALUES (?, ?, ?, ?, ?)");
+			$st->execute([$_POST['id'], $_POST['name'], $_POST['ip'], $_POST['mac'], $_POST['broadcast']]);
+			if($st->errorCode() == 0) echo '{"status":200, "reponse":"Success"}';
 			else {
 				http_response_code(400);
-				echo '{"status":400, "error":"' . $db->error . '"}';
+				echo json_encode([
+					'status' => 400,
+					"error" => $st->errorInfo()
+				]);
 			}
 		}
 		else {
@@ -35,9 +32,8 @@
 	}
 	else if($_POST['action'] == "remove" && isset($_POST['id'])){
 		if($auth->hasLevel(2)) {
-			$_POST['id'] = $db->escape_string($_POST['id']);
-			$query = "DELETE FROM server WHERE id = '{$_POST['id']}'";
-			$db->query($query);
+			$st = $db->prepare("DELETE FROM server WHERE id = ?");
+			$st->execute([$_POST['id']]);
 			echo '{"status":200, "reponse":"success"}';
 		}
 		else {
@@ -47,10 +43,8 @@
 	}
 	else if($_POST['action'] == "modify" && isset($_POST['id'],$_POST['name'],$_POST['mac'],$_POST['ip'],$_POST['broadcast'])){
 		if($auth->hasLevel(2)) {
-			//TODO: add support for custom broadcast address
-			foreach($_POST as $k=>$v) $_POST[$k] = $db->escape_string($v);
-			$query = "UPDATE server SET name='{$_POST['name']}',ip='{$_POST['ip']}',mac='{$_POST['mac']}',broadcast='{$_POST['broadcast']}' WHERE id = '{$_POST['id']}'";
-			$db->query($query);
+			$st = $db->prepare('UPDATE server SET name=?, ip=?, mac=?, broadcast=? WHERE id=?');
+			$st->execute([$_POST['name'], $_POST['ip'], $_POST['mac'], $_POST['broadcast'], $_POST['id']]);
 			echo '{"status":200, "reponse":"Success"}';
 		}
 		else {
