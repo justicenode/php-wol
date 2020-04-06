@@ -50,9 +50,8 @@ class Auth {
 		if ($st->rowCount() == 0) return false;
 		
 		$user = $st->fetch();
-		$hash = hash('sha512', $user['level'].'g$6|@#'.$user['id'].$password);
-		
-		if ($user['password'] == $hash) {
+
+		if ($user['password'] == hash('sha512', $user['salt'].$password, true)) {
 			$_SESSION['user'] = $user;
 			return true;
 		}
@@ -66,8 +65,38 @@ class Auth {
 	function logout() {
 		unset($_SESSION['user']);
 	}
-	
+
+	/**
+	 * @return string username of current user
+	 */
 	function getUsername(){
 		return $_SESSION['user']['username'];
+	}
+
+	/**
+	 * @return int id of current user
+	 */
+	function getUserId(){
+		return $_SESSION['user']['id'];
+	}
+
+	/**
+	 * updates the password of the current user
+	 * @param $newpassword string new password
+	 * @return bool success
+	 */
+	public function updatePassword($newpassword) {
+		if (!$this->hasLevel()) return false;
+		$db = new Database();
+		$st = $db->prepare('UPDATE `user` SET password=?, salt=? WHERE id=?');
+		list($password, $salt) = $this->hashPassword($newpassword);
+		$st->execute([$password, $salt, $this->getUserId()]);
+		return true;
+	}
+
+	private function hashPassword($password) {
+		$salt = hash('sha512', rand(), true);
+		$hash = hash('sha512', $salt . $password, true);
+		return [$hash, $salt];
 	}
 }

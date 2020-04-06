@@ -1,6 +1,6 @@
 let servers = [];
 let create = true;
-let serverName, mac, ip, id, broadcast, username, password, usernameDisplay, level;
+let serverName, mac, ip, id, broadcast, username, password, usernameDisplay, level, oldpassword, newpassword, newpassword2;
 
 function getServers(){
 	$.post("servers.php", {action:"get"}).done((servers) => {
@@ -164,6 +164,21 @@ function showLogin(nocheck = false){
 		});
 }
 
+function changePassword() {
+	$.post("login.php", {
+		a: "changepw",
+		password: oldpassword.val(),
+		newpassword: newpassword.val(),
+		newpassword2: newpassword2.val(),
+	}).done((data) => {
+		if (!data.response) {
+			bootbox.alert(data.msg);
+		} else {
+			bootbox.alert("Password changed");
+		}
+	});
+}
+
 window.onload = function(){
 	level = 0;
 	serverName = $("#name");
@@ -173,6 +188,9 @@ window.onload = function(){
 	broadcast = $("#broadcast");
 	usernameDisplay = $('#username-display');
 	password = $('#password');
+	oldpassword = $('#oldpassword');
+	newpassword = $('#newpassword');
+	newpassword2 = $('#newpassword2');
 
 	showLogin();
 };

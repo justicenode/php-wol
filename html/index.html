@@ -69,6 +69,32 @@
 			</div>
 		  </div>
 		</div>
+		<div id="password-modal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Login</h4>
+				</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label for="oldpassword">Old Password:</label>
+					<input id="oldpassword" placeholder="********" type="password" class="form-control"/>
+				</div>
+				<div class="form-group">
+					<label for="newpassword">New Password:</label>
+					<input id="newpassword" placeholder="********" type="password" class="form-control"/>
+				</div>
+				<div class="form-group">
+					<label for="newpassword2">Repeat Password:</label>
+					<input id="newpassword2" placeholder="********" type="password" class="form-control"/>
+				</div>
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-success" data-dismiss="modal" onclick="changePassword()"><span class="glyphicon glyphicon-log-in"></span> Login</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
 		<div class="container">
 			<div class="pull-left">
 				<div id="username-display">
@@ -76,6 +102,7 @@
 			</div>
 			<div class="btn-group pull-right">
 				<button title="logout" class="btn btn-default" onclick="logout()"><span class="glyphicon glyphicon-log-out"></span></button>
+				<button title="change password" class="btn btn-default" onclick="$('#password-modal').modal('show')"><span class="glyphicon glyphicon-user"></span></button>
 				<button title="refresh" class="btn btn-default" onclick="getServers()"><span class="glyphicon glyphicon-refresh"></span></button>
 				<button title="add" class="btn btn-success require-level-2" onclick="addServer()"><span class="glyphicon glyphicon-plus"></span></button>
 			</div>

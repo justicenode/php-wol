@@ -16,6 +16,19 @@
 	else if($_POST['a'] == 'login' && isset($_POST['username'], $_POST['password'])) {
 		$toReturn["response"] = $auth->login($_POST['username'], $_POST['password']);
 	}
+	else if($_POST['a'] == 'changepw' && isset($_POST['password'], $_POST['newpassword'], $_POST['newpassword2'])) {
+		$toReturn["response"] = false;
+		if ($auth->hasLevel()) {
+			if ($_POST['newpassword'] != $_POST['newpassword2'])
+				$toReturn['msg'] = 'passwords didnt match';
+			else if ($auth->login($auth->getUsername(), $_POST['password']))
+				$toReturn['msg'] = 'wrong password';
+			else {
+				$auth->updatePassword($_POST['newpassword']);
+				$toReturn['response'] = true;
+			}
+		}
+	}
 	else if($_POST['a'] == 'logout') {
 		$auth->logout();
 		$toReturn["response"] = true;

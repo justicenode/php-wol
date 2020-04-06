@@ -49,12 +49,11 @@ EOL);
 CREATE TABLE user (
   id int AUTO_INCREMENT NOT NULL PRIMARY KEY,
   username varchar(30) NOT NULL UNIQUE,
-  password varchar(128) NOT NULL,
+  password binary(64) NOT NULL,
+  salt binary(64) NOT NULL,
   level int NOT NULL
 );
 EOL);
-		$this->query(
-"INSERT INTO user VALUES (1, 'admin', '1879303f48fc69acc84e6b24608b2c7b932c18f90546186507b4513b44ce4ad2bfb360c223142239c6828201f4d05a3a6357429d2bd9cd44ed06b87b03e4a96a', 3);"
-		);
+		$this->query("INSERT INTO `user` (`id`, `username`, `password`, `salt`, `level`) VALUES (1, 'admin', 0xa28d2e6472c306c6c57138f5f2c6ff25498e5d3ccd9a63a1bc591f4b5fe1dedd4b4044bcf1cc0b61767f6d7ce8198d94eb432d03fa082261ab4741734f07e9b2, 0xb2c17f0341921fe13306e0d6b4c952d90ad12ce176e962f5d7f28254c51e4345accaafc5d1f003fe346ab8a1bf52330317d1007237ca8f78abd9420d4b5524a3, 3)");
 	}
 }
