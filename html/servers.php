@@ -58,4 +58,3 @@
 			echo '{"status":401, "reponse":"Unauthorized"}';
 		}
 	}
-?>
