@@ -1,20 +1,19 @@
 <?php
 class Database extends PDO {
-	private string $servername = "localhost";
-	private string $username = "root";
-	private string $password = "";
-    private string $database = "php-wol";
+	private $servername = "localhost";
+	private $username = "root";
+	private $password = "";
+	private $database = "php-wol";
 	
 	function __construct() {
-	    // Get configuration
-        if (file_exists('./config.php')) {
-            [
-                "servername" => $this->servername,
-                "username" => $this->username,
-                "password" => $this->password,
-                "database" => $this->database,
-            ] = include('./config.php');
-        }
+		// Get configuration
+		if (file_exists('./config.php')) {
+			$config = include('./config.php');
+			$this->servername = $config['servername'];
+			$this->username = $config['username'];
+			$this->password = $config['password'];
+			$this->database = $config['database'];
+		}
 
 		// Create connection
 		try {
