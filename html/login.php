@@ -21,9 +21,9 @@
 		if ($auth->hasLevel()) {
 			if ($_POST['newpassword'] != $_POST['newpassword2'])
 				$toReturn['msg'] = 'passwords didnt match';
-			else if ($auth->login($auth->getUsername(), $_POST['password']))
+			else if (!$auth->login($auth->getUsername(), $_POST['password'])) {
 				$toReturn['msg'] = 'wrong password';
-			else {
+			} else {
 				$auth->updatePassword($_POST['newpassword']);
 				$toReturn['response'] = true;
 			}

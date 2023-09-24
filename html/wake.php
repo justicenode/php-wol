@@ -8,6 +8,9 @@
 	}
 	else if(isset($_POST['mac'], $_POST['broadcast'])) {
 		$broadcast =  $_POST['broadcast'];
+		if(empty($broadcast)) {
+			$broadcast = '255.255.255.255';
+		}
 		$mac_array = explode(':', $_POST['mac']);
 
 		$hwaddr = '';

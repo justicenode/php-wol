@@ -14,7 +14,17 @@ A simple PHP WakeOnLan UI
 ###### Installation
 
 1. Clone the repo and copy the `html` folder into your webroot
-2. Change the lines below in `config.php` to fit your mysql setup *(DO NOT CREATE DB)*
+2. Create SQL user:
+
+```bash
+$ sudo mysql
+mysql> CREATE DATABASE 'php-wol';
+mysql> CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+mysql> GRANT ALL PRIVILEGES ON 'php-wol'.* TO 'username'@'localhost';
+mysql> FLUSH PRIVILEGES;
+
+```
+4. Change the lines below in `config.php` to fit your mysql setup
 
 ```
 private $servername = "localhost";
